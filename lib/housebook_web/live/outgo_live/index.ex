@@ -6,6 +6,7 @@ defmodule HousebookWeb.OutgoLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    IO.inspect("---mount---")
     {:ok, assign(socket, :outgos, list_outgos())}
   end
 

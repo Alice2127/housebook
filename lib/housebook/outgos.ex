@@ -20,14 +20,18 @@ defmodule Housebook.Outgos do
 
   """
   def list_outgos do
-     Repo.all(Outgo)
-    |> Repo.preload(:group)
+    IO.inspect("---list_outgos---")
+    outgos_base_query("食費") #outgos_base_queryの結果がRepo.allの第一引数
+      |>  Repo.all()
+  #   |> Debug.print("Repo.all")
+     |> Repo.preload(:group)
   end
 
-  defp outgos_base_query(group_id) do
+
+  defp outgos_base_query(name) do
     from(outgo in Outgo,
     join: group in assoc(outgo, :group),
-    where: outgo.group_id() == ^group_id,
+    where: group.name == ^name,
     )
   end
 
