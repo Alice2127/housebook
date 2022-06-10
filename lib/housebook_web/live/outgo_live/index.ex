@@ -9,7 +9,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:ok,
     socket
     |> assign(:name, "")
-    |> assign(:outgos, list_outgos("光熱費"))} #次はこの部分をUIからのinputを受け付けられるようにしたい。そのために検索ボックスを作る。
+    |> assign(:outgos, list_outgos(""))}
   end
 
   @impl true
@@ -41,6 +41,17 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:ok, _} = Outgos.delete_outgo(outgo)
 
     {:noreply, assign(socket, :outgos, list_outgos(""))}
+  end
+
+  #検索フォームのバックエンドを追加
+  @impl true
+  def handle_event("search", params, socket) do
+    name = params["name"]
+
+    {:noreply,
+      socket
+    |> assign(:name, name)
+    |> assign(:outgos, list_outgos(name))}
   end
 
   defp list_outgos(name) do
