@@ -17,6 +17,13 @@ defmodule HousebookWeb.Router do
   scope "/", HousebookWeb do
     pipe_through :browser
 
+    live "/outgos", OutgoLive.Index, :index
+    live "/outgos/new", OutgoLive.Index, :new
+    live "/outgos/:id/edit", OutgoLive.Index, :edit
+
+    live "/outgos/:id", OutgoLive.Show, :show
+    live "/outgos/:id/show/edit", OutgoLive.Show, :edit
+
     get "/", PageController, :index
   end
 

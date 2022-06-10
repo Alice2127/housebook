@@ -1,0 +1,41 @@
+<h1>Listing Outgos</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.outgo_index_path(@socket, :index)}>
+    <.live_component
+      module={HousebookWeb.OutgoLive.FormComponent}
+      id={@outgo.id || :new}
+      title={@page_title}
+      action={@live_action}
+      outgo={@outgo}
+      return_to={Routes.outgo_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Group</th>
+      <th>Payment</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="outgos">
+    <%= for outgo <- @outgos do %>
+      <tr id={"outgo-#{outgo.id}"}>
+        <td><%= outgo.group_id %></td>
+        <td><%= outgo.payment %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.outgo_show_path(@socket, :show, outgo) %></span>
+          <span><%= live_patch "Edit", to: Routes.outgo_index_path(@socket, :edit, outgo) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: outgo.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Outgo", to: Routes.outgo_index_path(@socket, :new) %></span>

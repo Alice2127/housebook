@@ -1,0 +1,31 @@
+<h1>Show Outgo</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.outgo_show_path(@socket, :show, @outgo)}>
+    <.live_component
+      module={HousebookWeb.OutgoLive.FormComponent}
+      id={@outgo.id}
+      title={@page_title}
+      action={@live_action}
+      outgo={@outgo}
+      return_to={Routes.outgo_show_path(@socket, :show, @outgo)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Group:</strong>
+    <%= @outgo.group_id %>
+  </li>
+
+  <li>
+    <strong>Payment:</strong>
+    <%= @outgo.payment %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.outgo_show_path(@socket, :edit, @outgo), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.outgo_index_path(@socket, :index) %></span>
