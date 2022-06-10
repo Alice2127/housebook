@@ -24,6 +24,13 @@ defmodule HousebookWeb.Router do
     live "/outgos/:id", OutgoLive.Show, :show
     live "/outgos/:id/show/edit", OutgoLive.Show, :edit
 
+    live "/groups", GroupLive.Index, :index
+    live "/groups/new", GroupLive.Index, :new
+    live "/groups/:id/edit", GroupLive.Index, :edit
+
+    live "/groups/:id", GroupLive.Show, :show
+    live "/groups/:id/show/edit", GroupLive.Show, :edit
+
     get "/", PageController, :index
   end
 
