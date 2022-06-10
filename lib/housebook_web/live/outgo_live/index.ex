@@ -9,7 +9,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:ok,
     socket
     |> assign(:name, "")
-    |> assign(:outgos, list_outgos("光熱費"))}
+    |> assign(:outgos, list_outgos("光熱費"))} #次はこの部分をUIからのinputを受け付けられるようにしたい。そのために検索ボックスを作る。
   end
 
   @impl true
