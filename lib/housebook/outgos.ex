@@ -8,6 +8,8 @@ defmodule Housebook.Outgos do
 
   alias Housebook.Outgos.Outgo
 
+  alias Housebook.Groups.Group #追加
+
   @doc """
   Returns the list of outgos.
 
@@ -18,8 +20,17 @@ defmodule Housebook.Outgos do
 
   """
   def list_outgos do
-    Repo.all(Outgo)
+     Repo.all(Outgo)
+    |> Repo.preload(:group)
   end
+
+  defp outgos_base_query(group_id) do
+    from(outgo in Outgo,
+    join: group in assoc(outgo, :group),
+    where: outgo.group_id() == ^group_id,
+    )
+  end
+
 
   @doc """
   Gets a single outgo.

@@ -2,8 +2,11 @@ defmodule Housebook.Outgos.Outgo do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Housebook.Groups.Group #追加
+
   schema "outgos" do
-    field :group_id, :integer
+    belongs_to(:group, Group) #追加
+    # field :group_id, :integer
     field :payment, :integer
 
     timestamps()
