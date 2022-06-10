@@ -6,4 +6,3 @@ defmodule Debug do
     data
   end
 end
-

@@ -7,7 +7,7 @@ defmodule HousebookWeb.OutgoLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     IO.inspect("---mount---")
-    {:ok, assign(socket, :outgos, list_outgos())}
+    {:ok, assign(socket, :outgos, list_outgos("食費"))} #次はこの部分をUIからのinputを受け付けられるようにしたい。そのために検索ボックスを作る。
   end
 
   @impl true
@@ -38,10 +38,10 @@ defmodule HousebookWeb.OutgoLive.Index do
     outgo = Outgos.get_outgo!(id)
     {:ok, _} = Outgos.delete_outgo(outgo)
 
-    {:noreply, assign(socket, :outgos, list_outgos())}
+    {:noreply, assign(socket, :outgos, list_outgos(""))}
   end
 
-  defp list_outgos do
-    Outgos.list_outgos()
+  defp list_outgos(name) do
+    Outgos.list_outgos(name)
   end
 end

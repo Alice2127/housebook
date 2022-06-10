@@ -8,7 +8,8 @@ defmodule Housebook.Outgos do
 
   alias Housebook.Outgos.Outgo
 
-  alias Housebook.Groups.Group #追加
+  # 追加
+  alias Housebook.Groups.Group
 
   @doc """
   Returns the list of outgos.
@@ -19,22 +20,20 @@ defmodule Housebook.Outgos do
       [%Outgo{}, ...]
 
   """
-  def list_outgos do
-    IO.inspect("---list_outgos---")
-    outgos_base_query("食費") #outgos_base_queryの結果がRepo.allの第一引数
-      |>  Repo.all()
-  #   |> Debug.print("Repo.all")
-     |> Repo.preload(:group)
+  def list_outgos(name) do
+    #  IO.inspect("---list_outgos---")
+    # outgos_base_queryの結果がRepo.allの第一引数
+    outgos_base_query(name)
+    |> Repo.all()
+    |> Repo.preload(:group)
   end
-
 
   defp outgos_base_query(name) do
     from(outgo in Outgo,
-    join: group in assoc(outgo, :group),
-    where: group.name == ^name,
+      join: group in assoc(outgo, :group),
+      where: group.name == ^name
     )
   end
-
 
   @doc """
   Gets a single outgo.
