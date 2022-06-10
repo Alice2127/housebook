@@ -43,7 +43,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:noreply, assign(socket, :outgos, list_outgos(""))}
   end
 
-  #検索フォームのバックエンドを追加
+
   @impl true
   def handle_event("search", params, socket) do
     name = params["name"]
