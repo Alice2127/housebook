@@ -32,7 +32,7 @@ defmodule Housebook.Outgos do
     from(outgo in Outgo,
       join: group in assoc(outgo, :group),
       where: like(group.name, ^"%#{name}%")
-    #  order_by: group_id
+      #  order_by: group_id
     )
   end
 

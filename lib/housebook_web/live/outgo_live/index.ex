@@ -7,9 +7,9 @@ defmodule HousebookWeb.OutgoLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
-    socket
-    |> assign(:name, "")
-    |> assign(:outgos, list_outgos(""))}
+     socket
+     |> assign(:name, "")
+     |> assign(:outgos, list_outgos(""))}
   end
 
   @impl true
@@ -24,6 +24,8 @@ defmodule HousebookWeb.OutgoLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
+    IO.inspect("---apply_action:new---")
+
     socket
     |> assign(:page_title, "New Outgo")
     |> assign(:outgo, %Outgo{})
@@ -43,15 +45,14 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:noreply, assign(socket, :outgos, list_outgos(""))}
   end
 
-
   @impl true
   def handle_event("search", params, socket) do
     name = params["name"]
 
     {:noreply,
-      socket
-    |> assign(:name, name)
-    |> assign(:outgos, list_outgos(name))}
+     socket
+     |> assign(:name, name)
+     |> assign(:outgos, list_outgos(name))}
   end
 
   defp list_outgos(name) do
