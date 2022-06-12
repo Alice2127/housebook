@@ -24,7 +24,7 @@ defmodule HousebookWeb.OutgoLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
-    IO.inspect("---apply_action:new---")
+    #IO.inspect("---apply_action:new---")
 
     socket
     |> assign(:page_title, "New Outgo")
@@ -47,6 +47,7 @@ defmodule HousebookWeb.OutgoLive.Index do
 
   @impl true
   def handle_event("search", params, socket) do
+
     name = params["name"]
 
     {:noreply,
