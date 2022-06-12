@@ -8,7 +8,6 @@ defmodule Housebook.Outgos do
 
   alias Housebook.Outgos.Outgo
 
-  # 追加
   alias Housebook.Groups.Group
 
   @doc """
@@ -21,8 +20,6 @@ defmodule Housebook.Outgos do
 
   """
   def list_outgos(name) do
-    #  IO.inspect("---list_outgos---")
-    # outgos_base_queryの結果がRepo.allの第一引数
     outgos_base_query(name)
     |> Repo.all()
     |> Repo.preload(:group)
@@ -31,8 +28,8 @@ defmodule Housebook.Outgos do
   defp outgos_base_query(name) do
     from(outgo in Outgo,
       join: group in assoc(outgo, :group),
-      where: like(group.name, ^"%#{name}%")
-      #  order_by: group_id
+      where: like(group.name, ^"%#{name}%"),
+      order_by: [desc: outgo.inserted_at, asc: group.id]
     )
   end
 
