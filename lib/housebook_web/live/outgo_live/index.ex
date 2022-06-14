@@ -80,22 +80,7 @@ defmodule HousebookWeb.OutgoLive.Index do
   #    )} #★リダイレクト先はindexだと思うけど引数そのままでいいんかな？
   # end
 
-  @impl true
-  def handle_event("update_page_size", %{"page_size" => page_size}, socket) do
-    params =
-      socket.assigns
-      |> Map.get(:outgos)
-      |> Map.take([:page_number, :page_size])
-      |> Map.merge(%{page_size: 5})
-      |> Keyword.new()
-
-    {:noreply,
-     push_redirect(socket,
-       to: Routes.outgo_index_path(socket, :index, params)
-     )}
-  end
-
-
+  
   @impl true
   def handle_event("search", params, socket) do
     name = params["name"]
