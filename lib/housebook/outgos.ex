@@ -20,10 +20,27 @@ defmodule Housebook.Outgos do
 
   """
   def list_outgos(name) do
+   outgos =
     outgos_base_query(name)
-    |> Repo.all()
-    |> Repo.preload(:group)
+     |> Repo.paginate(page: 2, page_size: 5) #次に、ここを変数化したい。
+
+     entries =
+     outgos.entries
+     |> Repo.preload(:group)
+
+     outgos
+     |> Map.put(:entries, entries)
+     |> Debug.print("outgos")
   end
+
+
+
+  # def list_outgos(name, page, page_size) do
+  #   outgos_base_query(name)
+  #   |> Repo.all()
+  #   |> Repo.preload(:group)
+  #   |> Repo.paginate(page: page, page_size: page_size)
+  # end
 
   defp outgos_base_query(name) do
     from(outgo in Outgo,
