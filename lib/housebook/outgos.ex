@@ -19,10 +19,10 @@ defmodule Housebook.Outgos do
       [%Outgo{}, ...]
 
   """
-  def list_outgos(name) do
+  def list_outgos(name, page, page_size) do
    outgos =
     outgos_base_query(name)
-     |> Repo.paginate(page: 2, page_size: 5) #次に、ここを変数化したい。
+     |> Repo.paginate(page: page, page_size: page_size)
 
      entries =
      outgos.entries

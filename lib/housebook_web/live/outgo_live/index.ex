@@ -4,15 +4,15 @@ defmodule HousebookWeb.OutgoLive.Index do
   alias Housebook.Outgos
   alias Housebook.Outgos.Outgo
 
-  # @default_page 1
-  # @default_page_size 10
+   @default_page 1
+   @default_page_size 10
 
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign(:name, "")
-     |> assign(:outgos, list_outgos(""))}
+     |> assign(:outgos, list_outgos("", 1, 5))} #次に、ここを変数化したい。
   end
 
   @impl true
@@ -45,7 +45,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     outgo = Outgos.get_outgo!(id)
     {:ok, _} = Outgos.delete_outgo(outgo)
 
-    {:noreply, assign(socket, :outgos, list_outgos(""))}
+    {:noreply, assign(socket, :outgos, list_outgos("", "", ""))}
   end
 
   # @impl true
@@ -63,20 +63,20 @@ defmodule HousebookWeb.OutgoLive.Index do
   #    )} #★リダイレクト先はindexだと思うけど引数そのままでいいんかな？
   # end
 
-  # @impl true
-  # def handle_event("update_page_size", %{"page_size" => page_size}, socket) do
-  #   params =
-  #     socket.assigns
-  #     |> Map.get(:outgos)
-  #     |> Map.take([:page_number, :page_size])
-  #     |> Map.merge(%{page_size: page_size})
-  #     |> Keyword.new()
+  @impl true
+  def handle_event("update_page_size", %{"page_size" => page_size}, socket) do
+    params =
+      socket.assigns
+      |> Map.get(:outgos)
+      |> Map.take([:page_number, :page_size])
+      |> Map.merge(%{page_size: 5})
+      |> Keyword.new()
 
-  #   {:noreply,
-  #    push_redirect(socket,
-  #      to: Routes.outgo_index_path(socket, :index, params)
-  #    )}
-  # end
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.outgo_index_path(socket, :index, params)
+     )}
+  end
 
 
   @impl true
@@ -86,11 +86,11 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:noreply,
      socket
      |> assign(:name, name)
-     |> assign(:outgos, list_outgos(name))}
+     |> assign(:outgos, list_outgos(name, "", ""))}
   end
 
-  defp list_outgos(name) do
-    Outgos.list_outgos(name)
+  defp list_outgos(name, page, page_size) do
+    Outgos.list_outgos(name, page, page_size)
   end
 
   # defp list_outgos(%{"page_number" => page, "page_size" => page_size}) do
