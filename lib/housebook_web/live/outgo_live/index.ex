@@ -13,7 +13,7 @@ defmodule HousebookWeb.OutgoLive.Index do
      socket
      |> assign(:name, "")
      |> assign(:page_size, 10)
-     |> assign(:outgos, list_outgos("", 1, 5))} #次に、ここを変数化したい。
+     |> assign(:outgos, list_outgos("", "", ""))}
   end
 
   @impl true
@@ -51,11 +51,9 @@ defmodule HousebookWeb.OutgoLive.Index do
 
   @impl true
   def handle_event("update_page_size", params, socket) do
-   IO.inspect(params)
    page_size =
    params
    |> Map.get("page_size")
-   |> IO.inspect()
 
   socket =
    socket
@@ -63,24 +61,25 @@ defmodule HousebookWeb.OutgoLive.Index do
    |> assign(:outgos, list_outgos("", 1, page_size))
 
     {:noreply, socket}
+
   end
 
-  # @impl true
-  # def handle_event("update_page", %{"page" => page}, socket) do
-  #   params =
-  #     socket.assigns
-  #     |> Map.get(:outgos)
-  #     |> Map.take([:page_number, :page_size])
-  #     |> Map.merge(%{page_number: page})
-  #     |> Keyword.new()
+  @impl true
+  def handle_event("update_page", params, socket) do
+    page =
+    params
+   |> Map.get("page")
 
-  #   {:noreply,
-  #    push_redirect(socket,
-  #      to: Routes.outgo_index_path(socket, :index, params)
-  #    )} #★リダイレクト先はindexだと思うけど引数そのままでいいんかな？
-  # end
+   socket =
+    socket
+    |> assign(:page,  page)
+    |> assign(:outgos, list_outgos("", page, ""))
 
-  
+      {:noreply, socket}
+  end
+       #ただし今のままだとページサイズを変えたあとページネーションで次へを押下するとページサイズがデフォルトの10件表示に戻ってしまう。
+
+
   @impl true
   def handle_event("search", params, socket) do
     name = params["name"]
@@ -111,5 +110,5 @@ defmodule HousebookWeb.OutgoLive.Index do
   #   Outgos.list_outgos()
   # end
 
-  #分岐、引数の数が変な気がする...
+  #検索ボックスとページネーションの合体が必要
 end

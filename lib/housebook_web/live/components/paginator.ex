@@ -28,6 +28,9 @@ defmodule Housebook.Components.Paginator do
             </select>
           </form>
         </div>
+        <div>
+        <button phx-click="update_page" phx-value-page={@page + 1} disabled={@page == @total_pages}>次へ</button>
+      </div>
       </div>
     </div>
     """
