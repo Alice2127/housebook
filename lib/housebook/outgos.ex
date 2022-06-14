@@ -30,17 +30,7 @@ defmodule Housebook.Outgos do
 
      outgos
      |> Map.put(:entries, entries)
-     |> Debug.print("outgos")
   end
-
-
-
-  # def list_outgos(name, page, page_size) do
-  #   outgos_base_query(name)
-  #   |> Repo.all()
-  #   |> Repo.preload(:group)
-  #   |> Repo.paginate(page: page, page_size: page_size)
-  # end
 
   defp outgos_base_query(name) do
     from(outgo in Outgo,

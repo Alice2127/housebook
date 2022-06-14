@@ -56,6 +56,8 @@
       </tbody>
     </table>
 
+    <Housebook.Components.Paginator.render total_entries={@outgos.total_entries} page_size={@page_size} page={@outgos.page_number} total_pages={@outgos.total_pages} />
+
     <span>
       <%= live_patch "New Outgo" , to: Routes.outgo_index_path(@socket, :new) %>
     </span>

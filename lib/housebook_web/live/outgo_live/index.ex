@@ -12,6 +12,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:ok,
      socket
      |> assign(:name, "")
+     |> assign(:page_size, 10)
      |> assign(:outgos, list_outgos("", 1, 5))} #次に、ここを変数化したい。
   end
 
@@ -46,6 +47,22 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:ok, _} = Outgos.delete_outgo(outgo)
 
     {:noreply, assign(socket, :outgos, list_outgos("", "", ""))}
+  end
+
+  @impl true
+  def handle_event("update_page_size", params, socket) do
+   IO.inspect(params)
+   page_size =
+   params
+   |> Map.get("page_size")
+   |> IO.inspect()
+
+  socket =
+   socket
+   |> assign(:page_size, page_size)
+   |> assign(:outgos, list_outgos("", 1, page_size))
+
+    {:noreply, socket}
   end
 
   # @impl true
