@@ -7,13 +7,14 @@
   </.modal>
   <% end %>
 
-  <.form for={:test} phx-submit="search">
 
-    <input type="text" name="name" value={@name} placeholder="品目名を入力" class="input">
-    <div>
-      <%= submit "検索" , phx_disable_with: "Saving..." %>
-    </div>
-  </.form>
+    <.form for={:test} phx-submit="search">
+
+      <input type="text" name="name" value={@name} placeholder="品目名を入力" class="input">
+      <div>
+        <%= submit "検索" , phx_disable_with: "Saving..." %>
+      </div>
+    </.form>
 
     <table>
       <thead>
@@ -54,6 +55,8 @@
           <% end %>
       </tbody>
     </table>
+
+    <Housebook.Components.Paginator.render total_entries={@outgos.total_entries} page_size={@page_size} page={@outgos.page_number} total_pages={@outgos.total_pages} />
 
     <span>
       <%= live_patch "New Outgo" , to: Routes.outgo_index_path(@socket, :new) %>

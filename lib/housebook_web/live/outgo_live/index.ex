@@ -4,12 +4,14 @@ defmodule HousebookWeb.OutgoLive.Index do
   alias Housebook.Outgos
   alias Housebook.Outgos.Outgo
 
+
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     {:ok,
      socket
      |> assign(:name, "")
-     |> assign(:outgos, list_outgos(""))}
+     |> assign(:page_size, 10)
+     |> assign(:outgos, list_outgos(params))}
   end
 
   @impl true
@@ -24,7 +26,6 @@ defmodule HousebookWeb.OutgoLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
-    IO.inspect("---apply_action:new---")
 
     socket
     |> assign(:page_title, "New Outgo")
@@ -38,12 +39,50 @@ defmodule HousebookWeb.OutgoLive.Index do
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
+  def handle_event("delete", params = %{"id" => id}, socket) do
     outgo = Outgos.get_outgo!(id)
     {:ok, _} = Outgos.delete_outgo(outgo)
 
-    {:noreply, assign(socket, :outgos, list_outgos(""))}
+    {:noreply, assign(socket, :outgos, list_outgos(params))}
   end
+
+  @impl true
+  def handle_event("update_page_size", params, socket) do
+   page_size =
+   params
+   |> Map.get("page_size")
+
+   params =
+    params
+    |> Map.put("name", socket.assigns.name)
+
+  socket =
+   socket
+   |> assign(:page_size, String.to_integer(page_size))
+   |> assign(:outgos, list_outgos(params))
+
+    {:noreply, socket}
+
+  end
+
+  @impl true
+  def handle_event("update_page", params, socket) do
+    page =
+    params
+   |> Map.get("page")
+
+   params =
+    params
+    |> Map.put("name", socket.assigns.name)
+
+   socket =
+    socket
+    |> assign(:page,  page)
+    |> assign(:outgos, list_outgos(params))
+
+      {:noreply, socket}
+  end
+
 
   @impl true
   def handle_event("search", params, socket) do
@@ -52,10 +91,14 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:noreply,
      socket
      |> assign(:name, name)
-     |> assign(:outgos, list_outgos(name))}
+     |> assign(:outgos, list_outgos(params))}
   end
 
-  defp list_outgos(name) do
-    Outgos.list_outgos(name)
+  defp list_outgos(params) do
+    name = Map.get(params, "name") || ""
+    page = Map.get(params, "page") || "1"
+    page_size = Map.get(params, "page_size") || "10"
+
+   Outgos.list_outgos(name, page, page_size)
   end
 end
