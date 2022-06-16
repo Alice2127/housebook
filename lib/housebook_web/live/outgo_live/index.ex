@@ -4,16 +4,14 @@ defmodule HousebookWeb.OutgoLive.Index do
   alias Housebook.Outgos
   alias Housebook.Outgos.Outgo
 
-   @default_page 1
-   @default_page_size 10
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     {:ok,
      socket
      |> assign(:name, "")
      |> assign(:page_size, 10)
-     |> assign(:outgos, list_outgos("", "", ""))}
+     |> assign(:outgos, list_outgos(params))}
   end
 
   @impl true
@@ -38,15 +36,14 @@ defmodule HousebookWeb.OutgoLive.Index do
     socket
     |> assign(:page_title, "Listing Outgos")
     |> assign(:outgo, nil)
-    # |> assign(:outgos, list_outgos(params)) #★引数の数が違くない？
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
+  def handle_event("delete", params = %{"id" => id}, socket) do
     outgo = Outgos.get_outgo!(id)
     {:ok, _} = Outgos.delete_outgo(outgo)
 
-    {:noreply, assign(socket, :outgos, list_outgos("", "", ""))}
+    {:noreply, assign(socket, :outgos, list_outgos(params))}
   end
 
   @impl true
@@ -55,10 +52,14 @@ defmodule HousebookWeb.OutgoLive.Index do
    params
    |> Map.get("page_size")
 
+   params =
+    params
+    |> Map.put("name", socket.assigns.name)
+
   socket =
    socket
-   |> assign(:page_size, page_size)
-   |> assign(:outgos, list_outgos("", 1, page_size))
+   |> assign(:page_size, String.to_integer(page_size))
+   |> assign(:outgos, list_outgos(params))
 
     {:noreply, socket}
 
@@ -70,14 +71,17 @@ defmodule HousebookWeb.OutgoLive.Index do
     params
    |> Map.get("page")
 
+   params =
+    params
+    |> Map.put("name", socket.assigns.name)
+
    socket =
     socket
     |> assign(:page,  page)
-    |> assign(:outgos, list_outgos("", page, ""))
+    |> assign(:outgos, list_outgos(params))
 
       {:noreply, socket}
   end
-       #★ただし今のままだとページサイズを変えたあとページネーションで次へを押下するとページサイズがデフォルトの10件表示に戻ってしまう。
 
 
   @impl true
@@ -87,28 +91,14 @@ defmodule HousebookWeb.OutgoLive.Index do
     {:noreply,
      socket
      |> assign(:name, name)
-     |> assign(:outgos, list_outgos(name, "", ""))}
+     |> assign(:outgos, list_outgos(params))}
   end
 
-  defp list_outgos(name, page, page_size) do
-    Outgos.list_outgos(name, page, page_size)
+  defp list_outgos(params) do
+    name = Map.get(params, "name") || ""
+    page = Map.get(params, "page") || "1"
+    page_size = Map.get(params, "page_size") || "10"
+
+   Outgos.list_outgos(name, page, page_size)
   end
-
-  # defp list_outgos(%{"page_number" => page, "page_size" => page_size}) do
-  #   Outgos.list_outgos(page, page_size)
-  # end
-
-  # defp list_outgos(%{"page_number" => page}) do
-  #   Outgos.list_outgos(page, @default_page_size)
-  # end
-
-  # defp list_outgos(%{"page_size" => page_size}) do
-  #   Outgos.list_outgos(@default_page, page_size)
-  # end
-
-  # defp list_outgos(%{}) do
-  #   Outgos.list_outgos()
-  # end
-
-  #検索ボックスとページネーションの合体が必要
 end
