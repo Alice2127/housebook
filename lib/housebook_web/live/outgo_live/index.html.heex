@@ -39,7 +39,7 @@
               <%= outgo.payment %>
             </td>
             <td>
-              <%= outgo.inserted_at %>
+              <%= outgo.inserted_at |> Timex.to_datetime("Etc/UTC") |> Timex.to_datetime("Asia/Tokyo") %>
             </td>
 
             <td>
