@@ -40,6 +40,13 @@ defmodule Housebook.Outgos do
     )
   end
 
+  def sum_payments() do
+      from(from o in Outgo,
+        select: sum(o.payment)
+      )
+      |> Repo.one()
+  end
+
   @doc """
   Gets a single outgo.
 
