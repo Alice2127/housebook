@@ -3,7 +3,7 @@ defmodule HousebookWeb.OutgoLive.Index do
 
   alias Housebook.Outgos
   alias Housebook.Outgos.Outgo
-
+  alias Housebook.Utils.DateTimeFormatter
 
   @impl true
   def mount(params, _session, socket) do
@@ -36,9 +36,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     socket
     |> assign(:page_title, "Listing Outgos")
     |> assign(:outgo, nil)
-    |> Debug.print("---★index★---")
     |> assign(:payment,  sum_payments())
-    |> Debug.print("---★index2★---")
   end
 
   @impl true
