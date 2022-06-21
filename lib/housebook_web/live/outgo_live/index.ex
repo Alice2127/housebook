@@ -36,9 +36,7 @@ defmodule HousebookWeb.OutgoLive.Index do
     socket
     |> assign(:page_title, "Listing Outgos")
     |> assign(:outgo, nil)
-    |> Debug.print("---★index★---")
     |> assign(:payment,  sum_payments())
-    |> Debug.print("---★index2★---")
   end
 
   @impl true
